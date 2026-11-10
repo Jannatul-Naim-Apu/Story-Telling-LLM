@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta
+        name="theme-color"
+        content="#0a0d18"
+    >
+
+    <title>Small-GPT</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="/" aria-label="Small-GPT home">
+                <span class="brand-icon">✳</span>
+                <span>small<span class="brand-accent">GPT</span></span>
+            </a>
+
+            <div class="sidebar-label">YOUR WORKSPACE</div>
+
+            <div class="workspace-card">
+                <span class="workspace-icon">⌘</span>
+                <div>
+                    <strong>Text Model</strong>
+                    <span>Local language model</span>
+                </div>
+                <span class="live-dot"></span>
+            </div>
+
+            <div class="sidebar-note">
+                <span class="note-icon">✦</span>
+                <p>
+                    Give it the start of a text and it carries on from there.
+                    It doesn't answer questions or look up facts.
+                </p>
+            </div>
+
+            <div class="sidebar-footer">
+                <span class="status-indicator"></span>
+                <span>Running locally</span>
+                <span class="version">v3.0</span>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div class="mobile-brand">
+                    <span class="brand-icon">✳</span>
+                    <strong>small<span class="brand-accent">GPT</span></strong>
+                </div>
+
+                <div class="model-info">
+                    <span class="model-indicator"></span>
+                    <span id="modelName">Small-GPT</span>
+                    <span class="model-tag">LOCAL</span>
+                </div>
+
+                <button
+                    id="clearChat"
+                    class="icon-button"
+                    type="button"
+                    title="Clear conversation"
+                    aria-label="Clear conversation"
+                >↺</button>
+            </header>
+
+            <section
+                id="chat"
+                class="chat-area"
+                aria-label="Conversation"
+                aria-live="polite"
+                aria-relevant="additions text"
+            >
+                <div id="welcome" class="welcome">
+                    <div class="welcome-icon">✳</div>
+
+                    <span class="eyebrow">YOUR LOCAL MODEL</span>
+
+                    <h1>How does your<br><span>story begin?</span></h1>
+
+                    <p class="welcome-description">
+                        Write the first line or two. The model carries on
+                        from there and stops when the story ends.
+                    </p>
+
+                    <div class="suggestion-grid">
+                        <button
+                            class="suggestion"
+                            type="button"
+                            data-prompt="Once upon a time, there was a little girl named Lily. She loved to"
+                        >
+                            <span class="suggestion-icon">⌘</span>
+                            <span>
+                                <strong>A little girl</strong>
+                                <small>Once upon a time...</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button
+                            class="suggestion"
+                            type="button"
+                            data-prompt="Tom and his dog went to the park. They saw a big"
+                        >
+                            <span class="suggestion-icon">≋</span>
+                            <span>
+                                <strong>A day at the park</strong>
+                                <small>Tom and his dog...</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button
+                            class="suggestion"
+                            type="button"
+                            data-prompt="The little bird was sad because"
+                        >
+                            <span class="suggestion-icon">✧</span>
+                            <span>
+                                <strong>A sad bird</strong>
+                                <small>The little bird was...</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button
+                            class="suggestion"
+                            type="button"
+                            data-prompt="Mia wanted to bake a cake for her mom, but"
+                        >
+                            <span class="suggestion-icon">⌕</span>
+                            <span>
+                                <strong>Baking a cake</strong>
+                                <small>Mia wanted to...</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="composer-section">
+                <form id="form" class="composer">
+                    <label class="sr-only" for="prompt">
+                        Your message
+                    </label>
+
+                    <textarea
+                        id="prompt"
+                        rows="1"
+                        placeholder="Start a story..."
+                        maxlength="12000"
+                        required
+                    ></textarea>
+
+                    <div class="composer-bottom">
+                        <div class="composer-hint">
+                            <span class="hint-icon">↵</span>
+                            <span>Ctrl + Enter to send</span>
+                        </div>
+
+                        <button
+                            id="askButton"
+                            class="send-button"
+                            type="submit"
+                            aria-label="Send message"
+                        >
+                            <span id="sendIcon">↑</span>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="settings-row">
+                    <label id="ragSetting" class="setting-control" for="rag" hidden>
+                        <input
+                            id="rag"
+                            type="checkbox"
+                            checked
+                        >
+                        <span class="toggle"></span>
+                        <span>Live retrieval</span>
+                        <span class="setting-help" title="Retrieve relevant source chunks before generating an answer.">ⓘ</span>
+                    </label>
+
+                    <div id="ragDivider" class="settings-divider" hidden></div>
+
+                    <label class="compact-setting" for="temperature">
+                        <span>Temp</span>
+                        <input
+                            id="temperature"
+                            type="number"
+                            value="0.75"
+                            min="0.1"
+                            max="2"
+                            step="0.05"
+                        >
+                    </label>
+
+                    <label class="compact-setting" for="maxTokens">
+                        <span>Tokens</span>
+                        <input
+                            id="maxTokens"
+                            type="number"
+                            value="400"
+                            min="1"
+                            max="512"
+                            step="1"
+                        >
+                    </label>
+
+                    <button
+                        id="settingsToggle"
+                        class="settings-toggle"
+                        type="button"
+                        aria-expanded="false"
+                    >
+                        <span>⚙</span>
+                        <span>Settings</span>
+                    </button>
+                </div>
+
+                <div id="advancedSettings" class="advanced-settings" hidden>
+                    <div>
+                        <strong>Generation settings</strong>
+                        <p>These values control how your model generates text.</p>
+                    </div>
+
+                    <div class="setting-description">
+                        <span>Temperature</span>
+                        <span>Lower values are more predictable.</span>
+                    </div>
+
+                    <div class="setting-description">
+                        <span>Max new tokens</span>
+                        <span>Limits the length of each reply.</span>
+                    </div>
+
+                    <div class="setting-description">
+                        <span>Sampling</span>
+                        <span>Top-k: 40 · Top-p: 0.92 · Repetition: 1.08</span>
+                    </div>
+                </div>
+
+                <p class="disclaimer">
+                    Small-GPT makes up what it writes, so don't rely on it for facts.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
